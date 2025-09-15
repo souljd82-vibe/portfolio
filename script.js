@@ -59,7 +59,7 @@ class PortfolioManager {
 
     // Load projects from localStorage
     loadProjects() {
-        const saved = localStorage.getItem('vive-portfolio-projects');
+        const saved = localStorage.getItem('vibe-portfolio-projects');
         if (saved) {
             try {
                 return JSON.parse(saved);
@@ -73,7 +73,7 @@ class PortfolioManager {
             {
                 id: this.generateId(),
                 title: "샘플 웹 프로젝트",
-                description: "Vive 코딩으로 만든 반응형 웹사이트 예시",
+                description: "Vibe 코딩으로 만든 반응형 웹사이트 예시",
                 category: "web",
                 tags: ["HTML", "CSS", "JavaScript"],
                 demoLink: "#",
@@ -109,7 +109,7 @@ class PortfolioManager {
     // Save projects to localStorage
     saveProjects() {
         try {
-            localStorage.setItem('vive-portfolio-projects', JSON.stringify(this.projects));
+            localStorage.setItem('vibe-portfolio-projects', JSON.stringify(this.projects));
         } catch (e) {
             console.error('Error saving projects:', e);
             this.showNotification('프로젝트 저장에 실패했습니다.', 'error');
@@ -437,7 +437,7 @@ class PortfolioManager {
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = `vive-portfolio-${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `vibe-portfolio-${new Date().toISOString().split('T')[0]}.json`;
         link.click();
 
         URL.revokeObjectURL(url);
@@ -657,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
     portfolioManager = new PortfolioManager();
 
     // Add keyboard shortcuts info
-    console.log('🚀 Vive Coding Portfolio loaded!');
+    console.log('🚀 Vibe Coding Portfolio loaded!');
     console.log('⌨️ Keyboard shortcuts:');
     console.log('  • Ctrl + N: Add new project');
     console.log('  • Escape: Close modal');
