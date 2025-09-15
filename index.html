@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vive Coding Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="main-title">
+                    <i class="fas fa-code"></i>
+                    Vive Coding Portfolio
+                </h1>
+                <p class="subtitle">코딩 연습 프로젝트 모음집</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-controls">
+                <button class="nav-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> 전체
+                </button>
+                <button class="nav-btn" data-filter="web">
+                    <i class="fas fa-globe"></i> 웹
+                </button>
+                <button class="nav-btn" data-filter="app">
+                    <i class="fas fa-mobile-alt"></i> 앱
+                </button>
+                <button class="nav-btn" data-filter="game">
+                    <i class="fas fa-gamepad"></i> 게임
+                </button>
+                <button class="add-project-btn" id="addProjectBtn">
+                    <i class="fas fa-plus"></i> 프로젝트 추가
+                </button>
+            </div>
+        </nav>
+
+        <!-- Projects Grid -->
+        <main class="main-content">
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Sample Projects -->
+                <article class="project-card" data-category="web">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-image"></i>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">샘플 웹 프로젝트</h3>
+                        <p class="project-description">Vive 코딩으로 만든 반응형 웹사이트 예시</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> 데모
+                            </a>
+                            <a href="#" class="project-link" target="_blank">
+                                <i class="fab fa-github"></i> 코드
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card" data-category="app">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-image"></i>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">모바일 앱 프로젝트</h3>
+                        <p class="project-description">React Native로 개발한 크로스 플랫폼 앱</p>
+                        <div class="project-tags">
+                            <span class="tag">React Native</span>
+                            <span class="tag">Firebase</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> 데모
+                            </a>
+                            <a href="#" class="project-link" target="_blank">
+                                <i class="fab fa-github"></i> 코드
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card" data-category="game">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-image"></i>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">브라우저 게임</h3>
+                        <p class="project-description">JavaScript Canvas를 활용한 2D 게임</p>
+                        <div class="project-tags">
+                            <span class="tag">Canvas</span>
+                            <span class="tag">Game Dev</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link" target="_blank">
+                                <i class="fas fa-play"></i> 플레이
+                            </a>
+                            <a href="#" class="project-link" target="_blank">
+                                <i class="fab fa-github"></i> 코드
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-folder-open"></i>
+                <h3>프로젝트가 없습니다</h3>
+                <p>새로운 프로젝트를 추가해보세요!</p>
+                <button class="btn-primary" onclick="showAddProjectModal()">
+                    <i class="fas fa-plus"></i> 첫 프로젝트 추가하기
+                </button>
+            </div>
+        </main>
+
+        <!-- Project Statistics -->
+        <aside class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-code-branch"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalProjects">3</span>
+                        <span class="stat-label">전체 프로젝트</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="lastUpdated">오늘</span>
+                        <span class="stat-label">마지막 업데이트</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <div class="stat-info">
+                        <span class="stat-number">Vive</span>
+                        <span class="stat-label">코딩 스타일</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div class="modal" id="addProjectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus"></i> 새 프로젝트 추가</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <form class="project-form" id="projectForm">
+                <div class="form-group">
+                    <label for="projectTitle">프로젝트 제목</label>
+                    <input type="text" id="projectTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectDescription">설명</label>
+                    <textarea id="projectDescription" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectCategory">카테고리</label>
+                    <select id="projectCategory" required>
+                        <option value="">카테고리 선택</option>
+                        <option value="web">웹</option>
+                        <option value="app">앱</option>
+                        <option value="game">게임</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectTags">기술 스택 (쉼표로 구분)</label>
+                    <input type="text" id="projectTags" placeholder="예: HTML, CSS, JavaScript">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="demoLink">데모 링크</label>
+                        <input type="url" id="demoLink">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="codeLink">코드 링크</label>
+                        <input type="url" id="codeLink">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectImage">이미지 URL (선택사항)</label>
+                    <input type="url" id="projectImage">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelBtn">취소</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> 추가하기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
