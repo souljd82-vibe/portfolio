@@ -38,10 +38,60 @@ class PortfolioManager {
             this.addProject();
         });
 
-        // Close modal on outside click
+        // Close modal on outside click (but not during text selection/drag)
+        let isTextSelecting = false;
+        let textSelectionStartTime = 0;
+        let mouseDownOnInput = false;
+
+        // 텍스트 필드에서 마우스 다운 감지
+        document.getElementById('addProjectModal').addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                mouseDownOnInput = true;
+                isTextSelecting = false;
+                textSelectionStartTime = Date.now();
+                console.log('텍스트 필드 mousedown 감지');
+            } else {
+                mouseDownOnInput = false;
+            }
+        });
+
+        // 마우스 이동 중 텍스트 선택 감지 (방향 무관)
+        document.getElementById('addProjectModal').addEventListener('mousemove', (e) => {
+            if (mouseDownOnInput && e.buttons === 1) { // 왼쪽 마우스 버튼이 눌려있을 때
+                const timeSinceStart = Date.now() - textSelectionStartTime;
+                if (timeSinceStart > 50) { // 50ms 이상이면 텍스트 선택 중으로 인식
+                    isTextSelecting = true;
+                    console.log('텍스트 선택 중 감지');
+                }
+            }
+        });
+
+        // 마우스 업 시 텍스트 선택 상태 해제 (지연 적용)
+        document.getElementById('addProjectModal').addEventListener('mouseup', () => {
+            console.log('mouseup - 텍스트 선택 종료 예약');
+            setTimeout(() => {
+                isTextSelecting = false;
+                mouseDownOnInput = false;
+                console.log('텍스트 선택 상태 완전 해제');
+            }, 200); // 200ms 지연으로 안전하게 처리
+        });
+
+        // 텍스트 선택 이벤트도 추가로 감지
+        document.getElementById('addProjectModal').addEventListener('selectstart', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                isTextSelecting = true;
+                console.log('selectstart 이벤트로 텍스트 선택 감지');
+            }
+        });
+
+        // 외부 클릭으로 모달 닫기 (텍스트 선택 중이 아닐 때만)
         document.getElementById('addProjectModal').addEventListener('click', (e) => {
-            if (e.target.id === 'addProjectModal') {
+            console.log('모달 클릭:', e.target.id, '텍스트 선택 중:', isTextSelecting);
+            if (e.target.id === 'addProjectModal' && !isTextSelecting) {
+                console.log('모달 닫기 실행');
                 this.hideAddProjectModal();
+            } else if (isTextSelecting) {
+                console.log('텍스트 선택 중이므로 모달 닫기 취소');
             }
         });
 
@@ -242,7 +292,7 @@ class PortfolioManager {
                     <div class="project-links">
                         ${project.demoLink && project.demoLink !== '#' ?
                             `<a href="${project.demoLink}" class="project-link" target="_blank" rel="noopener noreferrer">
-                                <i class="fas fa-external-link-alt"></i> 데모
+                                <i class="fas fa-external-link-alt"></i> 링크
                             </a>` : ''}
                         ${project.codeLink && project.codeLink !== '#' ?
                             `<a href="${project.codeLink}" class="project-link" target="_blank" rel="noopener noreferrer">
@@ -573,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.portfolioManager = new PortfolioManager();
 
     // Add keyboard shortcuts info
-    console.log('🚀 Vibe Coding Portfolio loaded!');
+    console.log('🚀 Vibe Coding Portfolio loaded! v2 (FIXED: Demo->Link)');
     console.log('⌨️ Keyboard shortcuts:');
     console.log('  • Ctrl + N: Add new project');
     console.log('  • Escape: Close modal');
