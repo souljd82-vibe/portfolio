@@ -292,7 +292,7 @@ class PortfolioManager {
                     <div class="project-links">
                         ${project.demoLink && project.demoLink !== '#' ?
                             `<a href="${project.demoLink}" class="project-link" target="_blank" rel="noopener noreferrer">
-                                <i class="fas fa-external-link-alt"></i> 데모
+                                <i class="fas fa-external-link-alt"></i> 링크
                             </a>` : ''}
                         ${project.codeLink && project.codeLink !== '#' ?
                             `<a href="${project.codeLink}" class="project-link" target="_blank" rel="noopener noreferrer">
