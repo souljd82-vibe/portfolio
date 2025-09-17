@@ -1,4 +1,4 @@
-# Vive Coding Portfolio
+# Vibe Coding Portfolio
 
 바이브 코딩 연습 프로젝트들을 관리하고 전시하는 포트폴리오 웹사이트입니다.
 
@@ -64,7 +64,7 @@ portfolio/
 ## 💾 데이터 저장
 
 프로젝트 데이터는 브라우저의 로컬 저장소(`localStorage`)에 자동 저장됩니다.
-- 키: `vive-portfolio-projects`
+- 키: `vibe-portfolio-projects`
 - 형식: JSON 배열
 
 ### 데이터 구조 예시
@@ -156,4 +156,4 @@ HTML의 select 옵션도 업데이트:
 
 ---
 
-**Made with ❤️ for Vive Coding Practice**
+**Made with ❤️ for Vibe Coding Practice**

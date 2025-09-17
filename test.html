@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .test-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.2);
+        }
+        .action-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .test-card:hover .action-buttons {
+            opacity: 1;
+        }
+        .action-btn {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .edit-btn { background: #6366f1; }
+        .edit-btn:hover { background: #4f46e5; }
+        .delete-btn { background: #ef4444; }
+        .delete-btn:hover { background: #dc2626; }
+
+        .debug-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .status {
+            color: #059669;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc2626;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 포트폴리오 버튼 테스트</h1>
+
+        <div class="debug-info">
+            <div><strong>테스트 상태:</strong> <span id="testStatus" class="status">준비중...</span></div>
+            <div><strong>portfolioManager 존재:</strong> <span id="managerStatus">확인중...</span></div>
+            <div><strong>마지막 로그:</strong> <span id="lastLog">없음</span></div>
+        </div>
+
+        <div class="test-card" id="testCard">
+            <h3>테스트 프로젝트</h3>
+            <p>이 카드에 마우스를 올려보세요. 편집/삭제 버튼이 나타나야 합니다.</p>
+            <div class="action-buttons">
+                <button class="action-btn edit-btn" onclick="testEdit('test-123')">편집</button>
+                <button class="action-btn delete-btn" onclick="testDelete('test-123')">삭제</button>
+            </div>
+        </div>
+
+        <div class="test-card">
+            <h3>실제 포트폴리오 함수 테스트</h3>
+            <p>아래 버튼들로 실제 함수를 테스트합니다.</p>
+            <button class="action-btn edit-btn" onclick="testPortfolioEdit()">포트폴리오 편집 테스트</button>
+            <button class="action-btn delete-btn" onclick="testPortfolioDelete()">포트폴리오 삭제 테스트</button>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h3>🚀 실제 포트폴리오 열기</h3>
+            <button style="padding: 15px 30px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;" onclick="openPortfolio()">
+                포트폴리오 사이트 열기
+            </button>
+        </div>
+
+        <div class="debug-info" id="debugLog">
+            <strong>디버그 로그:</strong><br>
+            <div id="logContent">로그가 여기에 표시됩니다...</div>
+        </div>
+    </div>
+
+    <script>
+        // 디버그 로그 함수
+        function addLog(message, type = 'info') {
+            const logContent = document.getElementById('logContent');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#dc2626' : type === 'success' ? '#059669' : '#374151';
+            logContent.innerHTML += `<div style="color: ${color}; margin: 2px 0;">[${timestamp}] ${message}</div>`;
+            logContent.scrollTop = logContent.scrollHeight;
+            document.getElementById('lastLog').textContent = message;
+        }
+
+        // 테스트 함수들
+        function testEdit(id) {
+            addLog(`편집 버튼 클릭됨! ID: ${id}`, 'success');
+            alert(`편집 기능 테스트 성공!\nID: ${id}`);
+        }
+
+        function testDelete(id) {
+            addLog(`삭제 버튼 클릭됨! ID: ${id}`, 'success');
+            if(confirm(`삭제 테스트: ID ${id}를 삭제하시겠습니까?`)) {
+                alert('삭제 기능 테스트 성공!');
+            }
+        }
+
+        function testPortfolioEdit() {
+            addLog('포트폴리오 편집 함수 테스트 중...', 'info');
+
+            if (typeof window.portfolioManager !== 'undefined') {
+                addLog('portfolioManager 발견!', 'success');
+                if (window.portfolioManager.projects && window.portfolioManager.projects.length > 0) {
+                    const firstProject = window.portfolioManager.projects[0];
+                    addLog(`첫 번째 프로젝트로 편집 테스트: ${firstProject.title}`, 'info');
+                    try {
+                        window.portfolioManager.editProject(firstProject.id);
+                        addLog('편집 함수 호출 성공!', 'success');
+                    } catch (error) {
+                        addLog(`편집 함수 에러: ${error.message}`, 'error');
+                    }
+                } else {
+                    addLog('프로젝트 데이터가 없습니다', 'error');
+                }
+            } else {
+                addLog('portfolioManager를 찾을 수 없습니다', 'error');
+            }
+        }
+
+        function testPortfolioDelete() {
+            addLog('포트폴리오 삭제 함수 테스트 중...', 'info');
+
+            if (typeof window.portfolioManager !== 'undefined') {
+                if (window.portfolioManager.projects && window.portfolioManager.projects.length > 0) {
+                    const lastProject = window.portfolioManager.projects[window.portfolioManager.projects.length - 1];
+                    addLog(`마지막 프로젝트로 삭제 테스트: ${lastProject.title}`, 'info');
+                    try {
+                        window.portfolioManager.deleteProject(lastProject.id);
+                        addLog('삭제 함수 호출 성공!', 'success');
+                    } catch (error) {
+                        addLog(`삭제 함수 에러: ${error.message}`, 'error');
+                    }
+                } else {
+                    addLog('삭제할 프로젝트 데이터가 없습니다', 'error');
+                }
+            } else {
+                addLog('portfolioManager를 찾을 수 없습니다', 'error');
+            }
+        }
+
+        function openPortfolio() {
+            window.open('index.html', '_blank');
+        }
+
+        // 초기화 및 상태 확인
+        window.addEventListener('load', function() {
+            addLog('테스트 페이지 로드 완료', 'success');
+            document.getElementById('testStatus').textContent = '준비완료';
+
+            // portfolioManager 확인
+            if (typeof window.portfolioManager !== 'undefined') {
+                document.getElementById('managerStatus').textContent = '✅ 존재함';
+                document.getElementById('managerStatus').className = 'status';
+                addLog('portfolioManager가 이미 로드되어 있습니다', 'success');
+            } else {
+                document.getElementById('managerStatus').textContent = '❌ 없음';
+                document.getElementById('managerStatus').className = 'error';
+                addLog('portfolioManager를 찾을 수 없습니다. index.html을 먼저 열어주세요.', 'error');
+            }
+
+            addLog('호버 테스트: 위의 카드에 마우스를 올려보세요!', 'info');
+        });
+
+        // 주기적으로 portfolioManager 상태 확인
+        setInterval(function() {
+            if (typeof window.portfolioManager !== 'undefined' && document.getElementById('managerStatus').textContent.includes('없음')) {
+                document.getElementById('managerStatus').textContent = '✅ 존재함';
+                document.getElementById('managerStatus').className = 'status';
+                addLog('portfolioManager가 감지되었습니다!', 'success');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -59,7 +59,7 @@ class PortfolioManager {
 
     // Load projects from localStorage
     loadProjects() {
-        const saved = localStorage.getItem('vive-portfolio-projects');
+        const saved = localStorage.getItem('vibe-portfolio-projects');
         if (saved) {
             try {
                 return JSON.parse(saved);
@@ -68,38 +68,60 @@ class PortfolioManager {
             }
         }
 
-        // Return sample projects if no saved data
+        // Return fresh sample projects
         return [
             {
                 id: this.generateId(),
-                title: "샘플 웹 프로젝트",
-                description: "Vive 코딩으로 만든 반응형 웹사이트 예시",
+                title: "반응형 포트폴리오 웹사이트",
+                description: "Vibe 코딩으로 제작한 개인 포트폴리오 사이트",
                 category: "web",
-                tags: ["HTML", "CSS", "JavaScript"],
-                demoLink: "#",
-                codeLink: "#",
+                tags: ["HTML5", "CSS3", "JavaScript", "반응형"],
+                demoLink: "",
+                codeLink: "",
                 imageUrl: "",
                 createdAt: new Date().toISOString()
             },
             {
                 id: this.generateId(),
-                title: "모바일 앱 프로젝트",
-                description: "React Native로 개발한 크로스 플랫폼 앱",
+                title: "할일 관리 앱",
+                description: "일정과 할일을 효율적으로 관리하는 웹 어플리케이션",
                 category: "app",
-                tags: ["React Native", "Firebase"],
-                demoLink: "#",
-                codeLink: "#",
+                tags: ["React", "localStorage", "PWA"],
+                demoLink: "",
+                codeLink: "",
                 imageUrl: "",
                 createdAt: new Date().toISOString()
             },
             {
                 id: this.generateId(),
-                title: "브라우저 게임",
-                description: "JavaScript Canvas를 활용한 2D 게임",
+                title: "2048 퍼즐 게임",
+                description: "JavaScript로 구현한 인기 퍼즐 게임",
                 category: "game",
-                tags: ["Canvas", "Game Dev"],
-                demoLink: "#",
-                codeLink: "#",
+                tags: ["JavaScript", "Canvas", "게임개발"],
+                demoLink: "",
+                codeLink: "",
+                imageUrl: "",
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: this.generateId(),
+                title: "날씨 정보 대시보드",
+                description: "실시간 날씨 정보를 보여주는 인터랙티브 대시보드",
+                category: "web",
+                tags: ["API", "Chart.js", "날씨", "대시보드"],
+                demoLink: "",
+                codeLink: "",
+                imageUrl: "",
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: this.generateId(),
+                title: "음식 주문 앱",
+                description: "음식점 메뉴 탐색과 주문을 위한 모바일 앱",
+                category: "app",
+                tags: ["React Native", "Firebase", "결제시스템"],
+                demoLink: "",
+                codeLink: "",
                 imageUrl: "",
                 createdAt: new Date().toISOString()
             }
@@ -109,7 +131,7 @@ class PortfolioManager {
     // Save projects to localStorage
     saveProjects() {
         try {
-            localStorage.setItem('vive-portfolio-projects', JSON.stringify(this.projects));
+            localStorage.setItem('vibe-portfolio-projects', JSON.stringify(this.projects));
         } catch (e) {
             console.error('Error saving projects:', e);
             this.showNotification('프로젝트 저장에 실패했습니다.', 'error');
@@ -196,10 +218,10 @@ class PortfolioManager {
                         <i class="${categoryIcons[project.category] || 'fas fa-image'}"></i>
                     </div>
                     <div class="project-actions">
-                        <button class="action-btn edit-btn" onclick="portfolioManager.editProject('${project.id}')" title="편집">
+                        <button class="action-btn edit-btn" onclick="window.portfolioManager.editProject('${project.id}')" title="편집">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn delete-btn" onclick="portfolioManager.deleteProject('${project.id}')" title="삭제">
+                        <button class="action-btn delete-btn" onclick="window.portfolioManager.deleteProject('${project.id}')" title="삭제">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -235,15 +257,18 @@ class PortfolioManager {
     }
 
     // Show add project modal
-    showAddProjectModal() {
+    showAddProjectModal(isEdit = false) {
         const modal = document.getElementById('addProjectModal');
         const form = document.getElementById('projectForm');
 
-        form.reset();
-        form.dataset.mode = 'add';
-        delete form.dataset.editId;
-
-        document.querySelector('.modal-header h2').innerHTML = '<i class="fas fa-plus"></i> 새 프로젝트 추가';
+        // 편집 모드가 아닐 때만 폼 리셋 및 기본 설정
+        if (!isEdit) {
+            form.reset();
+            form.dataset.mode = 'add';
+            delete form.dataset.editId;
+            document.querySelector('.modal-header h2').innerHTML = '<i class="fas fa-plus"></i> 새 프로젝트 추가';
+        }
+        // 편집 모드일 때는 제목이 이미 editProject에서 설정됨
 
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
@@ -317,28 +342,51 @@ class PortfolioManager {
 
     // Edit project
     editProject(id) {
+        console.log('편집 시도:', id);
+        console.log('현재 프로젝트들:', this.projects);
+
         const project = this.projects.find(p => p.id === id);
         if (!project) {
+            console.error('프로젝트를 찾을 수 없음:', id);
             this.showNotification('프로젝트를 찾을 수 없습니다.', 'error');
             return;
         }
 
+        console.log('편집할 프로젝트:', project);
+
         const form = document.getElementById('projectForm');
+        if (!form) {
+            console.error('폼을 찾을 수 없음');
+            return;
+        }
+
+        // 폼 모드 설정
         form.dataset.mode = 'edit';
         form.dataset.editId = id;
 
-        // Populate form
-        document.getElementById('projectTitle').value = project.title;
-        document.getElementById('projectDescription').value = project.description;
-        document.getElementById('projectCategory').value = project.category;
-        document.getElementById('projectTags').value = project.tags.join(', ');
-        document.getElementById('demoLink').value = project.demoLink || '';
-        document.getElementById('codeLink').value = project.codeLink || '';
-        document.getElementById('projectImage').value = project.imageUrl || '';
+        // 폼 초기화 후 데이터 입력
+        form.reset();
 
-        document.querySelector('.modal-header h2').innerHTML = '<i class="fas fa-edit"></i> 프로젝트 수정';
+        // 약간의 지연을 두고 값 설정
+        setTimeout(() => {
+            document.getElementById('projectTitle').value = project.title || '';
+            document.getElementById('projectDescription').value = project.description || '';
+            document.getElementById('projectCategory').value = project.category || '';
+            document.getElementById('projectTags').value = project.tags ? project.tags.join(', ') : '';
+            document.getElementById('demoLink').value = project.demoLink || '';
+            document.getElementById('codeLink').value = project.codeLink || '';
+            document.getElementById('projectImage').value = project.imageUrl || '';
 
-        this.showAddProjectModal();
+            console.log('폼 값 설정 완료');
+        }, 100);
+
+        // 제목 변경
+        const modalTitle = document.querySelector('.modal-header h2');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="fas fa-edit"></i> 프로젝트 수정';
+        }
+
+        this.showAddProjectModal(true);
     }
 
     // Delete project with confirmation
@@ -437,7 +485,7 @@ class PortfolioManager {
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = `vive-portfolio-${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `vibe-portfolio-${new Date().toISOString().split('T')[0]}.json`;
         link.click();
 
         URL.revokeObjectURL(url);
@@ -509,159 +557,27 @@ class PortfolioManager {
     }
 }
 
-// Add CSS for project actions and notifications
-const additionalStyles = `
-    .project-actions {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        display: flex;
-        gap: 0.5rem;
-        opacity: 0;
-        transition: var(--transition);
-    }
-
-    .project-card:hover .project-actions {
-        opacity: 1;
-    }
-
-    .action-btn {
-        width: 2.5rem;
-        height: 2.5rem;
-        border: none;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        transition: var(--transition);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-    }
-
-    .edit-btn {
-        background: var(--primary-color);
-        color: white;
-    }
-
-    .edit-btn:hover {
-        background: var(--primary-dark);
-        transform: scale(1.1);
-    }
-
-    .delete-btn {
-        background: var(--danger-color);
-        color: white;
-    }
-
-    .delete-btn:hover {
-        background: #dc2626;
-        transform: scale(1.1);
-    }
-
-    .project-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: var(--space-sm);
-        font-size: 0.85rem;
-    }
-
-    .project-category {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        color: var(--primary-color);
-        font-weight: 500;
-    }
-
-    .project-date {
-        color: var(--text-muted);
-    }
-
-    .project-link.disabled {
-        background: var(--text-muted);
-        cursor: not-allowed;
-    }
-
-    .notification {
-        position: fixed;
-        top: 2rem;
-        right: 2rem;
-        background: white;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-xl);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        z-index: 1001;
-        border-left: 4px solid var(--primary-color);
-    }
-
-    .notification.show {
-        transform: translateX(0);
-    }
-
-    .notification-success {
-        border-left-color: var(--accent-color);
-    }
-
-    .notification-error {
-        border-left-color: var(--danger-color);
-    }
-
-    .notification-content {
-        padding: 1rem 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: var(--text-primary);
-    }
-
-    .notification i {
-        font-size: 1.25rem;
-    }
-
-    .notification-success i {
-        color: var(--accent-color);
-    }
-
-    .notification-error i {
-        color: var(--danger-color);
-    }
-
-    @media (max-width: 768px) {
-        .notification {
-            top: 1rem;
-            right: 1rem;
-            left: 1rem;
-            transform: translateY(-100%);
-        }
-
-        .notification.show {
-            transform: translateY(0);
-        }
-    }
-`;
-
-// Inject additional styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = additionalStyles;
-document.head.appendChild(styleSheet);
+// 스타일은 이제 styles.css에 포함되어 있음
 
 // Global functions for onclick handlers
-window.showAddProjectModal = () => portfolioManager.showAddProjectModal();
+window.showAddProjectModal = () => {
+    if (window.portfolioManager) {
+        window.portfolioManager.showAddProjectModal(false); // 새 프로젝트 추가 모드
+    } else {
+        console.error('portfolioManager가 아직 초기화되지 않았습니다');
+    }
+};
 
 // Initialize portfolio manager when DOM is loaded
-let portfolioManager;
-
 document.addEventListener('DOMContentLoaded', () => {
-    portfolioManager = new PortfolioManager();
+    window.portfolioManager = new PortfolioManager();
 
     // Add keyboard shortcuts info
-    console.log('🚀 Vive Coding Portfolio loaded!');
+    console.log('🚀 Vibe Coding Portfolio loaded!');
     console.log('⌨️ Keyboard shortcuts:');
     console.log('  • Ctrl + N: Add new project');
     console.log('  • Escape: Close modal');
-});
 
-// Export for global access
-window.portfolioManager = portfolioManager;
+    // 디버그용 전역 접근
+    console.log('portfolioManager가 window에 등록됨:', window.portfolioManager);
+});

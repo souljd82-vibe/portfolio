@@ -701,6 +701,152 @@ a:focus-visible {
     outline-offset: 2px;
 }
 
+/* Project Actions (Edit/Delete Buttons) */
+.project-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.project-card:hover .project-actions {
+    opacity: 1;
+}
+
+.action-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.edit-btn {
+    background: var(--primary-color);
+}
+
+.edit-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    background: var(--danger-color);
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+/* Project Meta Information */
+.project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+    font-size: 0.85rem;
+}
+
+.project-category {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.project-date {
+    color: var(--text-muted);
+}
+
+.project-link.disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+    border-left: 4px solid var(--primary-color);
+    min-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-success {
+    border-left-color: var(--accent-color);
+}
+
+.notification-error {
+    border-left-color: var(--danger-color);
+}
+
+.notification-content {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+}
+
+.notification i {
+    font-size: 1.25rem;
+}
+
+.notification-success i {
+    color: var(--accent-color);
+}
+
+.notification-error i {
+    color: var(--danger-color);
+}
+
+@media (max-width: 768px) {
+    .notification {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        transform: translateY(-100%);
+        min-width: auto;
+    }
+
+    .notification.show {
+        transform: translateY(0);
+    }
+
+    .project-actions {
+        opacity: 1;
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: var(--space-md);
+        justify-content: flex-end;
+    }
+}
+
 /* Dark mode support (future enhancement) */
 @media (prefers-color-scheme: dark) {
     :root {
@@ -712,5 +858,10 @@ a:focus-visible {
         --bg-tertiary: #374151;
         --border-color: #374151;
         --border-light: #4b5563;
+    }
+
+    .notification {
+        background: var(--bg-primary);
+        border-color: var(--border-color);
     }
 }
