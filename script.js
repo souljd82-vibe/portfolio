@@ -38,9 +38,34 @@ class PortfolioManager {
             this.addProject();
         });
 
-        // Close modal on outside click
+        // Close modal on outside click (but not during drag)
+        let isDragging = false;
+        let dragStartTime = 0;
+
+        document.getElementById('addProjectModal').addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                isDragging = false; // 텍스트 필드에서는 드래그 허용
+                dragStartTime = Date.now();
+            }
+        });
+
+        document.getElementById('addProjectModal').addEventListener('mousemove', (e) => {
+            if (e.buttons > 0) { // 마우스 버튼이 눌려있을 때
+                const timeSinceStart = Date.now() - dragStartTime;
+                if (timeSinceStart > 100) { // 100ms 이상 드래그하면 드래그 상태로 인식
+                    isDragging = true;
+                }
+            }
+        });
+
+        document.getElementById('addProjectModal').addEventListener('mouseup', () => {
+            setTimeout(() => {
+                isDragging = false; // 드래그 끝나고 약간의 지연 후 리셋
+            }, 100);
+        });
+
         document.getElementById('addProjectModal').addEventListener('click', (e) => {
-            if (e.target.id === 'addProjectModal') {
+            if (e.target.id === 'addProjectModal' && !isDragging) {
                 this.hideAddProjectModal();
             }
         });
