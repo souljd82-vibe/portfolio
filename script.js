@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.portfolioManager = new PortfolioManager();
 
     // Add keyboard shortcuts info
-    console.log('🚀 Vibe Coding Portfolio loaded!');
+    console.log('🚀 Vibe Coding Portfolio loaded! (Updated: Demo->Link)');
     console.log('⌨️ Keyboard shortcuts:');
     console.log('  • Ctrl + N: Add new project');
     console.log('  • Escape: Close modal');
