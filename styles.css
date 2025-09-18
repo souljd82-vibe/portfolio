@@ -905,11 +905,16 @@ a:focus-visible {
 .upload-zone {
     border: 2px dashed var(--border-color);
     border-radius: var(--radius-lg);
-    padding: var(--space-2xl);
+    padding: var(--space-lg);
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
     background: var(--bg-tertiary);
+    min-height: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .upload-zone:hover {
@@ -918,19 +923,20 @@ a:focus-visible {
 }
 
 .upload-zone i {
-    font-size: 3rem;
+    font-size: 1.5rem;
     color: var(--primary-color);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-xs);
 }
 
 .upload-zone p {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-primary);
     margin-bottom: var(--space-xs);
 }
 
 .upload-zone small {
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
@@ -1021,11 +1027,20 @@ a:focus-visible {
     }
 
     .upload-zone {
-        padding: var(--space-xl);
+        padding: var(--space-md);
+        min-height: 2rem;
     }
 
     .upload-zone i {
-        font-size: 2rem;
+        font-size: 1.25rem;
+    }
+
+    .upload-zone p {
+        font-size: 0.85rem;
+    }
+
+    .upload-zone small {
+        font-size: 0.7rem;
     }
 
     .image-preview img {
