@@ -847,6 +847,193 @@ a:focus-visible {
     }
 }
 
+/* Image Upload Tabs and Components */
+.image-input-tabs {
+    display: flex;
+    margin-bottom: var(--space-md);
+    border-bottom: 2px solid var(--border-light);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+    background: var(--bg-tertiary);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: var(--bg-tertiary);
+}
+
+.tab-content {
+    display: none;
+    margin-top: var(--space-md);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form-hint {
+    display: block;
+    margin-top: var(--space-xs);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* File Upload Area */
+.file-upload-area {
+    margin-top: var(--space-sm);
+}
+
+.upload-zone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg-tertiary);
+}
+
+.upload-zone:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-secondary);
+}
+
+.upload-zone i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: var(--space-md);
+}
+
+.upload-zone p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.upload-zone small {
+    color: var(--text-muted);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-sm);
+}
+
+.file-info i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.file-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.remove-file {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.remove-file:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+/* Image Preview */
+.image-preview {
+    margin-top: var(--space-lg);
+    position: relative;
+    display: inline-block;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.image-preview img {
+    max-width: 200px;
+    max-height: 150px;
+    object-fit: cover;
+    display: block;
+}
+
+.remove-preview {
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.remove-preview:hover {
+    background: var(--danger-color);
+    transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .tab-btn {
+        font-size: 0.9rem;
+        padding: var(--space-sm);
+    }
+
+    .upload-zone {
+        padding: var(--space-xl);
+    }
+
+    .upload-zone i {
+        font-size: 2rem;
+    }
+
+    .image-preview img {
+        max-width: 150px;
+        max-height: 100px;
+    }
+}
+
 /* Dark mode support (future enhancement) */
 @media (prefers-color-scheme: dark) {
     :root {
@@ -863,5 +1050,14 @@ a:focus-visible {
     .notification {
         background: var(--bg-primary);
         border-color: var(--border-color);
+    }
+
+    .upload-zone {
+        background: var(--bg-primary);
+        border-color: var(--border-light);
+    }
+
+    .upload-zone:hover {
+        background: var(--bg-secondary);
     }
 }

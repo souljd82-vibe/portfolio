@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibe Coding Portfolio</title>
-    <!-- FORCE REDEPLOY: 2025-09-17-16:00 -->
-    <link rel="stylesheet" href="styles.css?v=20250917-1600">
+    <!-- FORCE REDEPLOY: 2025-09-17-17:00 -->
+    <link rel="stylesheet" href="styles.css?v=20250917-1700">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -206,8 +206,51 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="projectImage">이미지 URL (선택사항)</label>
-                    <input type="url" id="projectImage">
+                    <label>프로젝트 이미지 (선택사항)</label>
+
+                    <!-- 탭 버튼 -->
+                    <div class="image-input-tabs">
+                        <button type="button" class="tab-btn active" data-tab="url">
+                            <i class="fas fa-link"></i> URL 입력
+                        </button>
+                        <button type="button" class="tab-btn" data-tab="upload">
+                            <i class="fas fa-upload"></i> 파일 업로드
+                        </button>
+                    </div>
+
+                    <!-- URL 입력 탭 -->
+                    <div class="tab-content active" id="url-tab">
+                        <input type="url" id="projectImage" placeholder="https://example.com/image.jpg">
+                        <small class="form-hint">이미지 URL을 입력하세요</small>
+                    </div>
+
+                    <!-- 파일 업로드 탭 -->
+                    <div class="tab-content" id="upload-tab">
+                        <div class="file-upload-area">
+                            <input type="file" id="projectImageFile" accept="image/*" hidden>
+                            <div class="upload-zone" onclick="document.getElementById('projectImageFile').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>클릭하여 이미지 선택</p>
+                                <small>JPG, PNG, GIF, WebP (최대 5MB)</small>
+                            </div>
+                            <div class="file-info" style="display: none;">
+                                <i class="fas fa-file-image"></i>
+                                <span class="file-name"></span>
+                                <button type="button" class="remove-file" onclick="clearFileInput()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-hint">이미지 파일을 직접 업로드하세요</small>
+                    </div>
+
+                    <!-- 이미지 미리보기 -->
+                    <div class="image-preview" id="imagePreview" style="display: none;">
+                        <img id="previewImg" alt="미리보기">
+                        <button type="button" class="remove-preview" onclick="clearImagePreview()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-actions">
@@ -220,6 +263,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=20250917-1600"></script>
+    <script src="script.js?v=20250917-1700"></script>
 </body>
 </html>

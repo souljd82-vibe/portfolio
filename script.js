@@ -105,6 +105,141 @@ class PortfolioManager {
                 this.showAddProjectModal();
             }
         });
+
+        // Image upload tabs functionality
+        this.initializeImageUpload();
+    }
+
+    // Initialize image upload functionality
+    initializeImageUpload() {
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.switchImageTab(btn.dataset.tab);
+            });
+        });
+
+        // File input change handler
+        document.getElementById('projectImageFile').addEventListener('change', (e) => {
+            this.handleFileSelection(e.target.files[0]);
+        });
+
+        // Image URL input change handler for preview
+        document.getElementById('projectImage').addEventListener('input', (e) => {
+            this.handleImageUrlChange(e.target.value);
+        });
+    }
+
+    // Switch between URL and file upload tabs
+    switchImageTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabName);
+        });
+
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.toggle('active', content.id === `${tabName}-tab`);
+        });
+
+        // Clear preview when switching tabs
+        this.clearImagePreview();
+
+        // Clear inputs when switching tabs
+        if (tabName === 'url') {
+            document.getElementById('projectImageFile').value = '';
+            this.clearFileInfo();
+        } else {
+            document.getElementById('projectImage').value = '';
+        }
+    }
+
+    // Handle file selection
+    handleFileSelection(file) {
+        if (!file) return;
+
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            this.showNotification('지원하지 않는 이미지 형식입니다. JPG, PNG, GIF, WebP만 지원됩니다.', 'error');
+            return;
+        }
+
+        // Validate file size (5MB limit)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            this.showNotification('파일 크기가 너무 큽니다. 5MB 이하의 파일을 선택해주세요.', 'error');
+            return;
+        }
+
+        // Show file info
+        this.showFileInfo(file);
+
+        // Convert to Base64 and show preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64 = e.target.result;
+            this.showImagePreview(base64);
+            // Store base64 in hidden field or data attribute for form submission
+            document.getElementById('projectImage').value = base64;
+        };
+        reader.onerror = () => {
+            this.showNotification('파일을 읽는데 실패했습니다.', 'error');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Handle image URL change for preview
+    handleImageUrlChange(url) {
+        if (!url.trim()) {
+            this.clearImagePreview();
+            return;
+        }
+
+        // Basic URL validation
+        try {
+            new URL(url);
+            this.showImagePreview(url);
+        } catch {
+            this.clearImagePreview();
+        }
+    }
+
+    // Show file info
+    showFileInfo(file) {
+        const uploadZone = document.querySelector('.upload-zone');
+        const fileInfo = document.querySelector('.file-info');
+        const fileName = document.querySelector('.file-name');
+
+        uploadZone.style.display = 'none';
+        fileInfo.style.display = 'flex';
+        fileName.textContent = file.name;
+    }
+
+    // Clear file info
+    clearFileInfo() {
+        const uploadZone = document.querySelector('.upload-zone');
+        const fileInfo = document.querySelector('.file-info');
+
+        uploadZone.style.display = 'block';
+        fileInfo.style.display = 'none';
+    }
+
+    // Show image preview
+    showImagePreview(imageSrc) {
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+
+        previewImg.src = imageSrc;
+        preview.style.display = 'block';
+    }
+
+    // Clear image preview
+    clearImagePreview() {
+        const preview = document.getElementById('imagePreview');
+        preview.style.display = 'none';
+        document.getElementById('previewImg').src = '';
     }
 
     // Load projects from localStorage
@@ -317,6 +452,9 @@ class PortfolioManager {
             form.dataset.mode = 'add';
             delete form.dataset.editId;
             document.querySelector('.modal-header h2').innerHTML = '<i class="fas fa-plus"></i> 새 프로젝트 추가';
+
+            // Reset image upload tabs to default state
+            this.resetImageUploadTabs();
         }
         // 편집 모드일 때는 제목이 이미 editProject에서 설정됨
 
@@ -327,6 +465,18 @@ class PortfolioManager {
         setTimeout(() => {
             document.getElementById('projectTitle').focus();
         }, 100);
+    }
+
+    // Reset image upload tabs to default state
+    resetImageUploadTabs() {
+        // Reset to URL tab
+        this.switchImageTab('url');
+
+        // Clear all inputs and previews
+        document.getElementById('projectImage').value = '';
+        document.getElementById('projectImageFile').value = '';
+        this.clearImagePreview();
+        this.clearFileInfo();
     }
 
     // Hide add project modal
@@ -426,6 +576,22 @@ class PortfolioManager {
             document.getElementById('demoLink').value = project.demoLink || '';
             document.getElementById('codeLink').value = project.codeLink || '';
             document.getElementById('projectImage').value = project.imageUrl || '';
+
+            // Handle image preview for existing image
+            if (project.imageUrl) {
+                // Determine if it's a URL or Base64
+                if (project.imageUrl.startsWith('data:image/')) {
+                    // It's a Base64 image, switch to upload tab
+                    this.switchImageTab('upload');
+                } else {
+                    // It's a URL, switch to URL tab
+                    this.switchImageTab('url');
+                }
+                this.showImagePreview(project.imageUrl);
+            } else {
+                // No image, reset to URL tab
+                this.resetImageUploadTabs();
+            }
 
             console.log('폼 값 설정 완료');
         }, 100);
@@ -615,6 +781,28 @@ window.showAddProjectModal = () => {
         window.portfolioManager.showAddProjectModal(false); // 새 프로젝트 추가 모드
     } else {
         console.error('portfolioManager가 아직 초기화되지 않았습니다');
+    }
+};
+
+window.clearFileInput = () => {
+    if (window.portfolioManager) {
+        document.getElementById('projectImageFile').value = '';
+        window.portfolioManager.clearFileInfo();
+        window.portfolioManager.clearImagePreview();
+    }
+};
+
+window.clearImagePreview = () => {
+    if (window.portfolioManager) {
+        window.portfolioManager.clearImagePreview();
+        // Also clear the current input value
+        const activeTab = document.querySelector('.tab-btn.active');
+        if (activeTab && activeTab.dataset.tab === 'url') {
+            document.getElementById('projectImage').value = '';
+        } else {
+            document.getElementById('projectImageFile').value = '';
+            window.portfolioManager.clearFileInfo();
+        }
     }
 };
 
